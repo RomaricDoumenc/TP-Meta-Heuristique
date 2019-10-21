@@ -78,13 +78,14 @@ def chargerBench(nomFichier):
     """Lit un bench et retourne une liste d'objets et de boites."""
     with open(nomFichier , "r") as bench:
         listeObjets = []
-        listeBoites = []
+        capBoites = []
         
         donneesBoite = bench.readline().split(' ')
         donneesBoite[-1] = donneesBoite[-1].replace('\n','') # Suppression du retour à la ligne pour le dernier élément de la liste
-        nbBoites = int(donneesBoite[0])
-        for i in range(0,nbBoites):
-            listeBoites.append(Boite(int(donneesBoite[i+1]) , i)) # Ajout des capacités aux boites
+        nbTypesBoites = int(donneesBoite[0])
+        for i in range(0,nbTypesBoites):
+            capBoites.append(int(donneesBoite[i+1]))
+            
             
         nbCouleurs = int(bench.readline().replace('\n',''))
         nbObjets = int(bench.readline().replace('\n',''))
@@ -94,8 +95,9 @@ def chargerBench(nomFichier):
             donneesObjet[-1] = donneesObjet[-1].replace('\n','') # Suppression du retour à la ligne pour le dernier élément de la liste
             listeObjets.append(Objet(int(donneesObjet[0]) , int(donneesObjet[1]) , i))
             
-            
-    return (listeBoites , listeObjets)
+                        
+    return (capBoites , listeObjets)
+
 
 
 if __name__ == '__main__':
