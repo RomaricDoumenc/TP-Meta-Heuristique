@@ -28,7 +28,7 @@ class Boite():
         la contrainte de 2 couleurs maximum est respectée."""
         
         if self.capResiduelle() - obj.poids < 0:
-            print("Impossible d'ajouter l'objet " + str(obj) + " : pas assez de place dans la boite.")
+            #print("Impossible d'ajouter l'objet " + str(obj) + " : pas assez de place dans la boite.")
             return False
         
         listeCoul = self.listeCouleurs()
@@ -37,7 +37,7 @@ class Boite():
             try:
                 listeCoul.index(obj.color)
             except ValueError:
-                print("Impossible d'ajouter l'objet " + str(obj) + " : 2 couleurs maximum.")
+                #print("Impossible d'ajouter l'objet " + str(obj) + " : 2 couleurs maximum.")
                 return False  
                 
         self.listeObj.append(obj)
@@ -91,7 +91,10 @@ def chargerBench(nomFichier):
         nbObjets = int(bench.readline().replace('\n',''))
         
         for i in range(0,nbObjets):
-            donneesObjet = bench.readline().split('\t')
+            donneesObjet = bench.readline()
+            if donneesObjet == "13      58\n": # Rectification d'une erreur de formatage récurrente sur tous les benchs
+                donneesObjet = "13\t58"
+            donneesObjet = donneesObjet.split('\t')
             donneesObjet[-1] = donneesObjet[-1].replace('\n','') # Suppression du retour à la ligne pour le dernier élément de la liste
             listeObjets.append(Objet(int(donneesObjet[0]) , int(donneesObjet[1]) , i))
             
