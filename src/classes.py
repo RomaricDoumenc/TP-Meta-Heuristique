@@ -4,6 +4,7 @@ class Objet():
         self.poids = poids
         self.color = color
         self.id = idObj
+        self.boite = None
                 
     def __str__(self):
         return ("[Objet {} : Poids = {} , Couleur = {}]".format(self.id,self.poids,self.color))
@@ -41,6 +42,7 @@ class Boite():
                 return False  
                 
         self.listeObj.append(obj)
+        obj.boite = self
         
         return True
     
@@ -55,7 +57,7 @@ class Boite():
             
         
     def __str__(self):
-        chaine = 'Boite {} '.format(self.id)
+        chaine = 'Boite {} : cap = {} '.format(self.id,self.cap)
         for obj in self.listeObj:
             chaine += str(obj) + " ; "
         chaine += "Capacité restante = " +  str(self.capResiduelle())

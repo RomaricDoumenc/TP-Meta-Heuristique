@@ -1,5 +1,6 @@
 import random
 from time import clock
+import pdb
 
 from classes import Boite , Objet , chargerBench
 
@@ -356,7 +357,9 @@ def heur_naive_trie_selon_poids_depl_obj_ter(listeObj , capBoites , tempsLimite=
         boiteLaPlusVide = listeBoites[0]
         for boite in listeBoites: # Sélection de la boite la plus vide
             if boiteLaPlusVide.capResiduelle() < boite.capResiduelle():
-                boiteLaPlusVide = boite  
+                boiteLaPlusVide = boite
+ 
+        #pdb.set_trace()  
         objetsCandidats = []
         for boite in listeBoites:
             for obj in boite.listeObj: # Recherche des objets candidats pouvant rentrer dans la boite vide
@@ -365,22 +368,23 @@ def heur_naive_trie_selon_poids_depl_obj_ter(listeObj , capBoites , tempsLimite=
         objetsCandidats = trier_objets_selon_poids(objetsCandidats) # Tri de ces objets par ordre décroissnt de poids
         objAjoute = None
         for obj in objetsCandidats: # Tentative d'ajout d'un de ces objets dans la boite la plus vide
+            boiteOriginelle = obj.boite # Boite originelle d'où provient l'objet candidat 
             if boiteLaPlusVide.ajouterObjet(obj) == True:
                 objAjoute = obj
+                boiteOriginelle.supprimerObjet(obj.id)
+                sumPoids = 0 # Somme des poids des objets dans la boite
+                for o in boiteOriginelle.listeObj:
+                    sumPoids += o.poids
+                boiteOriginelle.cap = cap_la_plus_proche(sumPoids, capBoites) # Réadaptation de la capacité de la boite
+                """ print(boiteOriginelle)
+                pdb.set_trace() """
                 break # Sortie de la boucle for
-        if objAjoute != None:
-            for boite in listeBoites:
-                try:
-                    boite.listeObj.index(obj) # Est-ce que l'objet ajouté vient de cette boite ?
-                    for obj in boite.listeObj:
-                        sumPoids += obj.poids
-                    boite.cap = cap_la_plus_proche(sumPoids, capBoites) # Si oui , Réadaptation de la capacité de la boite
-                except ValueError:
-                    pass
         tempsActuel = clock()
         sumCapResid = 0
         for boite in listeBoites:
             sumCapResid += boite.capResiduelle()
+            #print(boite)
+        #pdb.set_trace()
                         
                         
                     
@@ -393,11 +397,11 @@ def heur_naive_trie_selon_poids_depl_obj_ter(listeObj , capBoites , tempsLimite=
     
           
 if __name__ == '__main__':
-    capBoites , listeObj = chargerBench("../instances2/bench_20_10")
-    boites1 , capPerdue1 = heur_naive_trie_selon_poids_depl_obj_bis(listeObj, capBoites)
-    print("Capacité perdue = " + str(capPerdue1))
+    capBoites , listeObj = chargerBench("../instances2/bench_2_0")
+    boites1 , capPerdue1 = heur_naive_trie_selon_poids_depl_obj_ter(listeObj, capBoites)
     for boite in boites1:
         print(boite)
+    print("Capacité perdue = " + str(capPerdue1))
 
 
     
