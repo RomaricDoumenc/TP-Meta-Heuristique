@@ -165,12 +165,12 @@ def heur_naive_trie_selon_poids(listeObj , capBoites):
         
     return (listeBoites , sumCapResid)
         
-def heur_naive_trie_selon_poids_depl_obj(listeObj , capBoites , tempsLimite=1):
+def heur_naive_trie_selon_poids_depl_obj(listeObj , capBoites , tempsLimite=0.01):
     """Même heuristique que précédemment sauf que l'étape de placer les objets de taille égale à un capacité d'une boite ; a été retirée
     et les objets sont triés selon leur poids par ordre décroissant.
     Ensuite on essaie de transférer des objets dans des boites qui pourraient être comblées par ces objets là.
     Et on redimensionne (si possible) la boite à qui on a volé un objet par un des types de boites existants afin de réduire la 
-    capacité perdue. La limite de temps est en secondes. (par défaut = 1 seconde)"""
+    capacité perdue. La limite de temps est en secondes. (par défaut = 0.01 seconde)"""
     
     tempsDebut = clock()
     
@@ -232,7 +232,7 @@ def heur_naive_trie_selon_poids_depl_obj(listeObj , capBoites , tempsLimite=1):
     return (listeBoites , sumCapResid)
 
         
-def heur_naive_trie_selon_poids_depl_obj_bis(listeObj , capBoites , tempsLimite=1):
+def heur_naive_trie_selon_poids_depl_obj_bis(listeObj , capBoites , tempsLimite=0.01):
     """Même heuristique que précédemment sauf que l'étape de placer les objets de taille égale à un capacité d'une boite ; a été remise ici
     et les objets sont triés selon leur poids par ordre décroissant.
     Ensuite on essaie de transférer des objets dans des boites qui pourraient être comblées par ces objets là.
@@ -313,7 +313,7 @@ def heur_naive_trie_selon_poids_depl_obj_bis(listeObj , capBoites , tempsLimite=
         
     return (listeBoites , sumCapResid)
 
-def heur_naive_trie_selon_poids_depl_obj_ter(listeObj , capBoites , tempsLimite=1):
+def heur_naive_trie_selon_poids_depl_obj_ter(listeObj , capBoites , tempsLimite=0.01):
     """Même heuristique que précédemment sauf que l'étape de placer les objets de taille égale à un capacité d'une boite ; a été remise ici
     et les objets sont triés selon leur poids par ordre décroissant.
     Ensuite on essaie de transférer des objets dans des boites qui pourraient être comblées par ces objets là.
@@ -505,7 +505,7 @@ def heur_naive_trie_selon_poids_depl_obj_alea(listeObj , capBoites , tempsLimite
     
 def repeter_heur_alea(listeObj , capBoites , nbExperiences=1000):
     """On répète un grand nombre de fois l'heuristique précédente car l'aléatoire peut donner des solutions très mal optimisées.
-    Le but est de varier le plus possible les solutions initiales afin de maximiser l'espace de recherche. 
+    Le but est de faire varier le plus possible les solutions initiales afin de maximiser l'espace de recherche. 
     Et à la fin on prendra la meilleure solution x."""
     meilleurX = None
     meilleurF_X = math.inf
@@ -520,7 +520,7 @@ def repeter_heur_alea(listeObj , capBoites , nbExperiences=1000):
             break # On arrête la recherche
     return meilleurX , meilleurF_X
 
-def heur_naive_trie_selon_poids_depl_obj_quad(listeObj , capBoites , tempsLimite=1):
+def heur_naive_trie_selon_poids_depl_obj_quad(listeObj , capBoites , tempsLimite=0.001):
     """Même heuristique que précédemment sauf que l'étape de placer les objets PAR 2 de taille égale à un capacité d'une boite ; a été remise ici
     et les objets sont triés selon leur poids par ordre décroissant.
     Ensuite on essaie de transférer des objets dans des boites qui pourraient être comblées par ces objets là.
@@ -625,7 +625,7 @@ def heur_naive_trie_selon_poids_depl_obj_quad(listeObj , capBoites , tempsLimite
         
     return (listeBoites , sumCapResid)
     
-def heur_naive_trie_selon_poids_depl_obj_quad_alea(listeObj , capBoites , tempsLimite=1):
+def heur_naive_trie_selon_poids_depl_obj_quad_alea(listeObj , capBoites , tempsLimite=0.001):
     """Même heuristique que précédemment sauf que l'étape de placer les objets PAR 2 de taille égale à un capacité d'une boite ; a été remise ici
     et les objets sont triés selon leur poids par ordre décroissant.
     Ensuite on essaie de transférer des objets dans des boites qui pourraient être comblées par ces objets là.
@@ -738,19 +738,20 @@ def repeter_heur_alea2(listeObj , capBoites , nbExperiences=1000):
     meilleurF_X = math.inf
     tempsDebut = clock()
     for i in range(nbExperiences):
-        print("iter = " + str(i + 1) + " : " + str(meilleurF_X))
+        #print("iter = " + str(i + 1) + " : " + str(meilleurF_X))
         x , f_x = heur_naive_trie_selon_poids_depl_obj_quad_alea(listeObj,capBoites)
         if f_x < meilleurF_X:
             meilleurX = x
             meilleurF_X = f_x
         tempsActuel = clock()
-        if tempsActuel - tempsDebut >= 60 or meilleurF_X <= 0: # Limite de 1 minute par bench dépassé ?
+        if tempsActuel - tempsDebut >= 600 or meilleurF_X <= 0: # Limite de 1 minute par bench dépassé ?
             break # On arrête la recherche
     return meilleurX , meilleurF_X
 
 
 if __name__ == '__main__':
-    capBoites , listeObj = chargerBench("../instances2/bench_2_1")
+    capBoites , listeObj = chargerBench("../instances2/bench_8_0")
+    
     boites1 , capPerdue1 = repeter_heur_alea2(listeObj, capBoites)
     for boite in boites1:
         print(boite)
