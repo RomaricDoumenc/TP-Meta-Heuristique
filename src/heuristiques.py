@@ -3,7 +3,7 @@ from time import clock
 import pdb
 import math
 
-from classes import Boite , Objet , chargerBench
+from classes import Boite , Objet , chargerBench , genererBenchAleatoire
 
 
 def permuter_objets(boite1 , boite2 , obj1 , obj2):
@@ -520,7 +520,7 @@ def repeter_heur_alea(listeObj , capBoites , nbExperiences=1000):
             break # On arrête la recherche
     return meilleurX , meilleurF_X
 
-def heur_naive_trie_selon_poids_depl_obj_quad(listeObj , capBoites , tempsLimite=0.001):
+def heur_naive_trie_selon_poids_depl_obj_quad(listeObj , capBoites , tempsLimite=0.01):
     """Même heuristique que précédemment sauf que l'étape de placer les objets PAR 2 de taille égale à un capacité d'une boite ; a été remise ici
     et les objets sont triés selon leur poids par ordre décroissant.
     Ensuite on essaie de transférer des objets dans des boites qui pourraient être comblées par ces objets là.
@@ -663,7 +663,7 @@ def heur_naive_trie_selon_poids_depl_obj_quad_alea(listeObj , capBoites , tempsL
             i += 1
         except ValueError:
             pass
-    
+
      
     while listeObj2 != []:
         sumPoids = 0 # Somme des poids des objets non rangés
@@ -738,21 +738,25 @@ def repeter_heur_alea2(listeObj , capBoites , nbExperiences=1000):
     meilleurF_X = math.inf
     tempsDebut = clock()
     for i in range(nbExperiences):
-        #print("iter = " + str(i + 1) + " : " + str(meilleurF_X))
-        x , f_x = heur_naive_trie_selon_poids_depl_obj_quad_alea(listeObj,capBoites)
+        x , f_x = heur_naive_trie_selon_poids_depl_obj_quad_alea(listeObj,capBoites,tempsLimite=0.001)
         if f_x < meilleurF_X:
             meilleurX = x
             meilleurF_X = f_x
         tempsActuel = clock()
-        if tempsActuel - tempsDebut >= 600 or meilleurF_X <= 0: # Limite de 1 minute par bench dépassé ?
+        print("iter = " + str(i + 1) + " : " + str(f_x) + " ; meilleur : " + str(meilleurF_X))
+        if tempsActuel - tempsDebut >= 60 or meilleurF_X <= 0: # Limite de 1 minute par bench dépassé ?
             break # On arrête la recherche
     return meilleurX , meilleurF_X
 
 
 if __name__ == '__main__':
-    capBoites , listeObj = chargerBench("../instances2/bench_8_0")
-    
-    boites1 , capPerdue1 = repeter_heur_alea2(listeObj, capBoites)
+    capBoites,listeObj = genererBenchAleatoire(
+        nbObjets = 111,
+        nbTypes = 20,
+        nbCouleurs = 88
+    )
+    #capBoites,listeObj = chargerBench("../instances2/bench_17_18")
+    boites1 , capPerdue1 = repeter_heur_alea2(listeObj, capBoites, 1000)
     for boite in boites1:
         print(boite)
     print("Capacité perdue = " + str(capPerdue1))

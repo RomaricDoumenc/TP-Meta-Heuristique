@@ -1,3 +1,4 @@
+import random
 
 class Objet():
     def __init__(self , poids , color , idObj):
@@ -102,6 +103,31 @@ def chargerBench(nomFichier):
             
                         
     return (capBoites , listeObjets)
+
+def genererBenchAleatoire(nbObjets, nbTypes, nbCouleurs):
+    """Génère un bench de manière aléatoire."""
+    listeObjets = []
+    capBoites = []
+    poidsMax = 50
+
+    for idType in range(nbTypes): # Génération des types de boites
+        cap = random.randrange(1,poidsMax+1)
+        capBoites.append(cap)
+        
+    capBoites.sort()
+    poidsMax = max(capBoites) # Réadaptation du poids maximum en fonction du plus grand type de boite
+
+    for idObj in range(nbObjets): # Génération des objets
+        poids = random.randrange(1,poidsMax+1) # poids généré entre 1 et poidsMax
+        coul = random.randrange(1,nbCouleurs+1)
+        obj = Objet(poids, coul, idObj)
+        listeObjets.append(obj)
+    
+
+    return (capBoites , listeObjets)
+
+
+
 
 
 

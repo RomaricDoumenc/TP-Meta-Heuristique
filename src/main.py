@@ -1,5 +1,6 @@
 from heuristiques import *
-from classes import Objet , Boite , chargerBench
+from time import perf_counter
+from classes import Objet , Boite , chargerBench , genererBenchAleatoire
 import sys
 
 """
@@ -9,23 +10,18 @@ import sys
 """
 
 if __name__ == "__main__":
-    nomFichier = input("Chemin relatif ou absolu du bench que vous souhaitez tester : ")
-    capBoites,listeObj = chargerBench(nomFichier) # Récupération de l'argument n°2 qui correspond au bench passé en parammètre
-    boites1 , capPerdue1 = heur_naive(listeObj, capBoites)
-    boites2 , capPerdue2 = heur_naive_bis(listeObj, capBoites)
-    boites3 , capPerdue3 = heur_naive_trie_selon_poids(listeObj, capBoites)
-    boites4 , capPerdue4 = heur_naive_trie_selon_poids_depl_obj(listeObj, capBoites)
-    boites5 , capPerdue5 = heur_naive_trie_selon_poids_depl_obj_bis(listeObj, capBoites)
-    boites6 , capPerdue6 = heur_naive_trie_selon_poids_depl_obj_ter(listeObj, capBoites)
-    boites7 , capPerdue7 = repeter_heur_alea(listeObj, capBoites)
-    boites8 , capPerdue8 = heur_naive_trie_selon_poids_depl_obj_quad(listeObj,capBoites)
-    print("Capacité perdue heur_naive = " + str(capPerdue1))
-    print("Capacité perdue heur_naive_bis = " + str(capPerdue2))
-    print("Capacité perdue heur_naive_trie_selon_poids = " + str(capPerdue3))
-    print("Capacité perdue heur_naive_trie_selon_poids_depl_obj = " + str(capPerdue4))
-    print("Capacité perdue heur_naive_trie_selon_poids_depl_obj_bis = " + str(capPerdue5))
-    print("Capacité perdue heur_naive_trie_selon_poids_depl_obj_ter = " + str(capPerdue6))
-    print("Capacité perdue heur_alea = " + str(capPerdue7))
-    print("Capacité perdue heur_naive_trie_selon_poids_depl_obj_quad = " + str(capPerdue8))
-    for boite in boites8:
+    # nomFichier = input("Chemin relatif ou absolu du bench que vous souhaitez tester : ")
+    nbIterations = int(input("Nombre d'itérations : "))
+    capBoites,listeObj = genererBenchAleatoire(
+        nbObjets = 250,
+        nbTypes = 10,
+        nbCouleurs = 30
+    )
+    debut = perf_counter()
+    boites , capPerdue = repeter_heur_alea2(listeObj, capBoites, nbExperiences=nbIterations)
+    fin = perf_counter()
+   
+    for boite in boites:
         print(boite)
+    print("\nCapacité perdue heur_alea2 = " + str(capPerdue))
+    print("Exécute en {} secondes.".format(fin-debut))
