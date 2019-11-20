@@ -503,20 +503,20 @@ def heur_naive_trie_selon_poids_depl_obj_alea(listeObj , capBoites , tempsLimite
         
     return (listeBoites , sumCapResid)
     
-def repeter_heur_alea(listeObj , capBoites , nbExperiences=1000):
+def repeter_heur_alea(listeObj , capBoites , tempsLimite=30):
     """On répète un grand nombre de fois l'heuristique précédente car l'aléatoire peut donner des solutions très mal optimisées.
     Le but est de faire varier le plus possible les solutions initiales afin de maximiser l'espace de recherche. 
     Et à la fin on prendra la meilleure solution x."""
     meilleurX = None
     meilleurF_X = math.inf
     tempsDebut = clock()
-    for i in range(nbExperiences):
+    while(True):
         x , f_x = heur_naive_trie_selon_poids_depl_obj_alea(listeObj,capBoites)
         if f_x < meilleurF_X:
             meilleurX = x
             meilleurF_X = f_x
         tempsActuel = clock()
-        if tempsActuel - tempsDebut >= 60 or meilleurF_X <= 0: # Limite de 1 minute par bench dépassé ou optimum global trouvé ?
+        if tempsActuel - tempsDebut >= tempsLimite or meilleurF_X <= 0: # Limite de 1 minute par bench dépassé ou optimum global trouvé ?
             break # On arrête la recherche
     return meilleurX , meilleurF_X
 
@@ -730,21 +730,20 @@ def heur_naive_trie_selon_poids_depl_obj_quad_alea(listeObj , capBoites , tempsL
         
     return (listeBoites , sumCapResid)
     
-def repeter_heur_alea2(listeObj , capBoites , nbExperiences=1000):
+def repeter_heur_alea2(listeObj , capBoites ,tempsLimite=30):
     """On répète un grand nombre de fois l'heuristique précédente car l'aléatoire peut donner des solutions très mal optimisées.
     Le but est de varier le plus possible les solutions initiales afin de maximiser l'espace de recherche. 
     Et à la fin on prendra la meilleure solution x."""
     meilleurX = None
     meilleurF_X = math.inf
     tempsDebut = clock()
-    for i in range(nbExperiences):
+    while(True):
         x , f_x = heur_naive_trie_selon_poids_depl_obj_quad_alea(listeObj,capBoites,tempsLimite=0.001)
         if f_x < meilleurF_X:
             meilleurX = x
             meilleurF_X = f_x
         tempsActuel = clock()
-        print("iter = " + str(i + 1) + " : " + str(f_x) + " ; meilleur : " + str(meilleurF_X))
-        if tempsActuel - tempsDebut >= 60 or meilleurF_X <= 0: # Limite de 1 minute par bench dépassé ?
+        if tempsActuel - tempsDebut >= tempsLimite or meilleurF_X <= 0: # Limite de 1 minute par bench dépassé ?
             break # On arrête la recherche
     return meilleurX , meilleurF_X
 
