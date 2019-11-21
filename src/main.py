@@ -76,5 +76,5 @@ if __name__ == "__main__":
             results.write("Capacité perdue = " + str(listeCapPerdues[i]))
             results.write("\n\n\n")
 
-    print("Exécuté en {} secondes.".format(fin-debut))
+    print("Exécuté en {} secondes. Consultez le fichier solutions.txt pour plus de détails sur les solutions trouvées.".format(fin-debut))
     os.system("pause")
