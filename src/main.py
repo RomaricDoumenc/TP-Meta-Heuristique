@@ -5,7 +5,7 @@ import os
 
 if __name__ == "__main__":
     nomFichier = input("Chemin absolu du bench que vous souhaitez tester : ")
-    temps = int(input("Temps d'exécution (en secondes) : "))
+    temps = float(input("Temps d'exécution (en secondes) : "))
     if (temps > 60):
         temps = 60
     capBoites,listeObj = chargerBench(nomFichier)
